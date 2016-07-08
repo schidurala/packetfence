@@ -3240,6 +3240,32 @@ sub externalPortalEnforcement {
     return $FALSE;
 }
 
+=item handleTrap
+
+Trap handling logic
+
+=cut
+
+sub handleTrap {
+    my ($self, $trapInfo) = @_;
+    my $trapHashRef = $self->_handleTrap($trapInfo);
+    unless (defined $trapHashRef) {
+        my $logger = $self->logger();
+        $logger->warn("SNMP trap handling not implemented for this type of switch.");
+        return { trapType => 'unknown'};
+    }
+    return $trapHashRef;
+}
+
+=item _handleTrap
+
+The method to override to support handling a trap
+
+=cut
+
+sub _handleTrap {
+    return undef;
+}
 
 =back
 
