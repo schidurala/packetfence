@@ -437,6 +437,8 @@ sub getRegisteredRole {
             };
             $role = &pf::authentication::match([@sources], $params, $Actions::SET_ROLE, \$source);
             my $unregdate = &pf::authentication::match([@sources], $params, $Actions::SET_UNREG_DATE);
+            my $time_balance = &pf::authentication::match([@sources], $params, $Actions::SET_TIME_BALANCE);
+            my $bandwidth_balance = &pf::authentication::match([@sources], $params, $Actions::SET_BANDWIDTH_BALANCE);
             pf::person::person_modify($args->{'user_name'},
                 'source'  => $source,
                 'portal'  => $profile->getName,
@@ -452,6 +454,12 @@ sub getRegisteredRole {
             }
             if (defined $role) {
                 %info = (%info, (category => $role));
+            }
+            if (defined $time_balance) {
+                %info = (%info, (time_balance => pf::util::normalize_time($time_balance)));
+            }
+            if (defined $bandwidth_balance) {
+                %info = (%info, (bandwidth_balance => pf::util::unpretty_bandwidth($bandwidth_balance)));
             }
             node_modify($args->{'mac'},%info);
         }
@@ -571,7 +579,10 @@ sub getNodeInfoForAutoReg {
             $role = &pf::authentication::match([@sources], $params, $Actions::SET_ROLE, \$source);
         }
         my $unregdate = &pf::authentication::match([@sources], $params, $Actions::SET_UNREG_DATE);
-        
+        my $time_balance = &pf::authentication::match([@sources], $params, $Actions::SET_TIME_BALANCE);
+        my $bandwidth_balance = &pf::authentication::match([@sources], $params, $Actions::SET_BANDWIDTH_BALANCE);
+        $node_info{'time_balance'} = pf::util::normalize_time($time_balance) if (defined($time_balance));
+        $node_info{'bandwidth_balance'} = pf::util::unpretty_bandwidth($bandwidth_balance) if (defined($bandwidth_balance));
         # Trigger a person lookup for 802.1x users
         pf::lookup::person::async_lookup_person($args->{'user_name'}, $source);
 
