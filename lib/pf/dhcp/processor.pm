@@ -647,6 +647,8 @@ sub update_iplog {
         return;
     }
 
+    ### record last-seen
+
     # we have to check directly in the DB since the OMAPI already contains the current lease info
     my $oldip  = pf::iplog::_mac2ip_sql($srcmac);
     my $oldmac = pf::iplog::_ip2mac_sql($srcip);
