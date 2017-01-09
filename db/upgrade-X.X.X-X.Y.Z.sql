@@ -22,6 +22,12 @@ UPDATE password set valid_from="0000-00-00 00:00:00" WHERE valid_from IS NULL;
 ALTER TABLE password MODIFY valid_from DATETIME NOT NULL DEFAULT "0000-00-00 00:00:00";
 
 --
+-- Add last_seen column to node table
+--
+
+ALTER TABLE node ADD last_seen DATETIME NOT NULL DEFAULT "0000-00-00 00:00:00";
+
+--
 -- The VERSION_INT to ensure proper ordering of the version in queries
 --
 
