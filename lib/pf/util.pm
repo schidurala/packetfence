@@ -84,6 +84,7 @@ BEGIN {
         is_in_list
         validate_date
         clean_locale 
+        pf_chown
     );
 }
 
